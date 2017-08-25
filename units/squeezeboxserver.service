@@ -1,0 +1,19 @@
+[Unit]
+Description=Logitech Media Server Daemon
+After=network.target
+
+[Service]
+User=volumio
+#Group=nogroup
+PIDFile=/var/run/logitechmediaserver.pid
+WorkingDirectory=/var/lib/squeezeboxserver
+ExecStartPre=/bin/mkdir -p /var/log/squeezeboxserver
+ExecStartPre=/bin/chown -R volumio /var/log/squeezeboxserver
+ExecStart=/usr/sbin/squeezeboxserver \
+        --prefsdir /var/lib/squeezeboxserver/prefs \
+        --cachedir /var/lib/squeezeboxserver/cache \
+        --logdir /var/log/squeezeboxserver \
+        --charset utf8
+
+[Install]
+WantedBy=multi-user.target
