@@ -15,13 +15,11 @@ if [ ! -f $INSTALLING ]; then
 	lms_deb=${latest_lms##*/}
 	sudo dpkg -i $lms_deb
 
-	# mkdir /var/log/squeezeboxserver/
-	# chown squeezeboxserver /var/log/squeezeboxserver/
-	# chmod 775 /var/log/squeezeboxserver/
+	chown volumio:volumio /var/lib/squeezeboxserver
 
 	# Add the systemd unit
 	rm /etc/systemd/system/squeezeboxserver.service	
-	wget -O /etc/systemd/system/squeezeboxserver.service https://raw.githubusercontent.com/Saiyato/volumio-kodi-plugin/master/kodi_configuration/guisettings.xml
+	wget -O /etc/systemd/system/squeezeboxserver.service https://raw.githubusercontent.com/Saiyato/volumio-lms-plugin/master/units/squeezeboxserver.service
 	
 	rm $INSTALLING
 

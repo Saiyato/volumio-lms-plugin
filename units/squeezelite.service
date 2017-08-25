@@ -6,7 +6,7 @@ After=network.target
 After=avahi-daemon.service
 
 [Service]
-ExecStart=/usr/local/bin/squeezelite {OPTIONS}
+ExecStart=/usr/local/bin/squeezelite -z -o {OUTPUTDEVICE} -s {SERVER} -n {NAME}
 Restart=always
 
 [Install]
