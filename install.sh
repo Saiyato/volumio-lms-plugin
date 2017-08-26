@@ -8,12 +8,13 @@ if [ ! -f $INSTALLING ]; then
 
 	# Download LMS 7.9.0
 	mkdir -p /home/volumio/logitechmediaserver
-	wget /home/volumio/logitechmediaserver http://downloads.slimdevices.com/LogitechMediaServer_v7.9.0/logitechmediaserver_7.9.0_arm.deb
+	wget -O /home/volumio/logitechmediaserver http://downloads.slimdevices.com/LogitechMediaServer_v7.9.0/logitechmediaserver_7.9.0_arm.deb
 	
 	# Install package and dependencies
 	for f in /home/volumio/logitechmediaserver/logitechmediaserver*.deb; do dpkg -i "$f"; done
 	apt-get -f install
 
+	mkdir /var/lib/squeezeboxserver
 	chown volumio:volumio /var/lib/squeezeboxserver
 
 	# Add the systemd unit
