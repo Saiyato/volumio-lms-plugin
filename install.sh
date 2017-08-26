@@ -6,14 +6,13 @@ if [ ! -f $INSTALLING ]; then
 
 	touch $INSTALLING
 
-	# http://downloads.slimdevices.com/LogitechMediaServer_v7.9.0/logitechmediaserver_7.9.0_arm.deb
-	url="http://www.mysqueezebox.com/update/?version=7.9.0&revision=1&geturl=1&os=deb"
-	latest_lms=$(wget -q -O - "$url")
-	mkdir -p /sources
-	cd /sources
-	wget $latest_lms
-	lms_deb=${latest_lms##*/}
-	sudo dpkg -i $lms_deb
+	# Download LMS 7.9.0
+	mkdir -p /home/volumio/logitechmediaserver
+	wget /home/volumio/logitechmediaserver http://downloads.slimdevices.com/LogitechMediaServer_v7.9.0/logitechmediaserver_7.9.0_arm.deb
+	
+	# Install package and dependencies
+	for f in /home/volumio/logitechmediaserver/logitechmediaserver*.deb; do dpkg -i "$f"; done
+	apt-get -f install
 
 	chown volumio:volumio /var/lib/squeezeboxserver
 

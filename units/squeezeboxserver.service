@@ -4,6 +4,7 @@ After=network.target
 
 [Service]
 User=volumio
+PermissionsStartOnly=true
 #Group=nogroup
 PIDFile=/var/run/logitechmediaserver.pid
 WorkingDirectory=/var/lib/squeezeboxserver
