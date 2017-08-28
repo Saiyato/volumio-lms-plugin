@@ -10,7 +10,7 @@
 		"icon": "fa-server",
 		"onSave": {
 			"type": "controller",
-			"endpoint": "miscellanea/LMS",
+			"endpoint": "music_service/lms",
 			"method": "updateLMSConfig"
 		},
 		"saveButton": {
