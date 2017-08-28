@@ -7,6 +7,7 @@ User=volumio
 PermissionsStartOnly=true
 #Group=nogroup
 PIDFile=/var/run/logitechmediaserver.pid
+# Legacy code; name is still squeezeboxserver
 WorkingDirectory=/var/lib/squeezeboxserver
 ExecStartPre=/bin/mkdir -p /var/log/squeezeboxserver
 ExecStartPre=/bin/chown -R volumio /var/log/squeezeboxserver

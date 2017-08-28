@@ -1,5 +1,5 @@
 {
-  "lms_enabled": {
+  "enabled": {
     "type": "boolean",
     "value": true
   }

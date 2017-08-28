@@ -1,178 +1,28 @@
 {
 	"page": {
-		"label": "TRANSLATE.SNAPCAST.SNAPCASTCONF"
+		"label": "TRANSLATE.LMS.LMSCONF"
 	},
 	"sections": [{
-		"id": "section_lms",
+		"id": "section_lmsconf",
 		"element": "section",
-		"label": "TRANSLATE.SNAPCAST.SERVER",
-		"description": "TRANSLATE.SNAPCAST.D_SERVER",
+		"label": "TRANSLATE.LMS.SERVER",
+		"description": "TRANSLATE.LMS.D_SERVER",
 		"icon": "fa-server",
 		"onSave": {
 			"type": "controller",
-			"endpoint": "miscellanea/snapcast",
-			"method": "updateSnapServer"
+			"endpoint": "miscellanea/LMS",
+			"method": "updateLMSConfig"
 		},
 		"saveButton": {
-			"label": "TRANSLATE.SNAPCAST.SAVE",
-			"data": ["server_enabled",
-			"mpd_pipe_name",
-			"sample_rate",
-			"bit_depth",
-			"channels",
-			"codec"]
+			"label": "TRANSLATE.LMS.SAVE",
+			"data": ["enabled""]
 		},
 		"content": [{
-			"id": "server_enabled",
+			"id": "enabled",
 			"element": "switch",
-			"doc": "TRANSLATE.SNAPCAST.D_SERVER_ENABLED",
-			"label": "TRANSLATE.SNAPCAST.SERVER_ENABLED",
+			"doc": "TRANSLATE.LMS.D_SERVER_ENABLED",
+			"label": "TRANSLATE.LMS.SERVER_ENABLED",
 			"value": true
-		},
-		{
-			"id": "mpd_pipe_name",
-			"element": "input",
-			"type": "text",
-			"doc": "TRANSLATE.SNAPCAST.D_MAIN_PIPE_NAME",
-			"label": "TRANSLATE.SNAPCAST.MAIN_PIPE_NAME",
-			"value": "VOLUMIO-MPD",
-			"visibleIf": {
-				"field": "server_enabled",
-				"value": true
-			}
-		},
-		{
-			"id": "sample_rate",
-			"element": "select",
-			"doc": "TRANSLATE.SNAPCAST.D_SAMPLE_RATE",
-			"label": "TRANSLATE.SNAPCAST.SAMPLE_RATE",
-			"value": {
-				"value": 48000,
-				"label": "48000Hz"
-			},
-			"options": [],
-			"visibleIf": {
-				"field": "server_enabled",
-				"value": true
-			}
-		},
-		{
-			"id": "bit_depth",
-			"element": "select",
-			"doc": "TRANSLATE.SNAPCAST.D_BIT_DEPTH",
-			"label": "TRANSLATE.SNAPCAST.BIT_DEPTH",
-			"value": {
-				"value": 16,
-				"label": "16 bits"
-			},
-			"options": [],
-			"visibleIf": {
-				"field": "server_enabled",
-				"value": true
-			}
-		},
-		{
-			"id": "channels",
-			"type": "text",
-			"element": "input",
-			"doc": "TRANSLATE.SNAPCAST.D_CHANNELS",
-			"label": "TRANSLATE.SNAPCAST.CHANNELS",
-			"value": "2",
-			"visibleIf": {
-				"field": "server_enabled",
-				"value": true
-			}
-		},
-		{
-			"id": "codec",
-			"element": "select",
-			"doc": "TRANSLATE.SNAPCAST.D_CODEC",
-			"label": "TRANSLATE.SNAPCAST.CODEC",
-			"value": {
-				"value": "flac",
-				"label": "Flac (lossless compressed [default])"
-			},
-			"options": [],
-			"visibleIf": {
-				"field": "server_enabled",
-				"value": true
-			}
-		}]
-	},
-	{
-		"id": "section_clientconf",
-		"element": "section",
-		"label": "TRANSLATE.SNAPCAST.CLIENT",
-		"description": "TRANSLATE.SNAPCAST.D_CLIENT",
-		"icon": "fa-music",
-		"onSave": {
-			"type": "controller",
-			"endpoint": "miscellanea/snapcast",
-			"method": "updateSnapClient"
-		},
-		"saveButton": {
-			"label": "TRANSLATE.SNAPCAST.SAVE",
-			"data": ["client_enabled",
-			"volumio_host",
-			"custom_host",
-			"host",
-			"soundcard"]
-		},
-		"content": [{
-			"id": "client_enabled",
-			"element": "switch",
-			"doc": "TRANSLATE.SNAPCAST.D_CLIENT_ENABLED",
-			"label": "TRANSLATE.SNAPCAST.CLIENT_ENABLED",
-			"value": true
-		},
-		{
-			"id": "volumio_host",
-			"element": "select",
-			"doc": "TRANSLATE.SNAPCAST.D_VOLUMIOHOST",
-			"label": "TRANSLATE.SNAPCAST.VOLUMIOHOST",
-			"value": {
-				"value": "127.0.0.1",
-				"label": "Localhost [default]"
-			},
-			"options": [],
-			"visibleIf": {
-				"field": "client_enabled",
-				"value": true
-			}
-		},
-		{
-			"id": "custom_host",
-			"element": "switch",
-			"doc": "TRANSLATE.SNAPCAST.D_CUSTOMHOST",
-			"label": "TRANSLATE.SNAPCAST.CUSTOMHOST",
-			"value": false
-		},
-		{
-			"id": "host",
-			"element": "input",
-			"type": "text",
-			"doc": "TRANSLATE.SNAPCAST.D_HOSTNAME",
-			"label": "TRANSLATE.SNAPCAST.HOSTNAME",
-			"value": "127.0.0.1",
-			"visibleIf": {
-				"field": "custom_host",
-				"value": true
-			}
-		},
-		{
-			"id": "soundcard",
-			"element": "select",
-			"doc": "TRANSLATE.SNAPCAST.D_SOUNDCARD",
-			"label": "TRANSLATE.SNAPCAST.SOUNDCARD",
-			"value": {
-				"value": "ALSA",
-				"label": "Audio Jack"
-			},
-			"options": [],
-			"visibleIf": {
-				"field": "client_enabled",
-				"value": true
-			}
 		}]
 	}]
 }
