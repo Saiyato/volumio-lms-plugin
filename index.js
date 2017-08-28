@@ -43,8 +43,13 @@ ControllerLMS.prototype.onStop = function() {
 	var defer = libQ.defer();
 
 	self.stopService('logitechmediaserver')
+	.then(function(edefer)
+	{
+		defer.resolve();
+	})
 	.fail(function(e)
 	{
+		self.commandRouter.pushToastMessage('error', "Stopping failed", "Could not stop the LMS plugin in a fashionable manner, error: " + e);
 		defer.reject(new error());
 	});
 
@@ -56,8 +61,13 @@ ControllerLMS.prototype.stop = function() {
 	var defer = libQ.defer();
 
 	self.stopService('logitechmediaserver')
+	.then(function(edefer)
+	{
+		defer.resolve();
+	})
 	.fail(function(e)
 	{
+		self.commandRouter.pushToastMessage('error', "Stopping failed", "Could not stop the LMS plugin in a fashionable manner, error: " + e);
 		defer.reject(new error());
 	});
 
@@ -69,6 +79,10 @@ ControllerLMS.prototype.onStart = function() {
 	var defer = libQ.defer();
 
 	self.restartService('logitechmediaserver', true)
+	.then(function(edefer)
+	{
+		defer.resolve();
+	})
 	.fail(function(e)
 	{
 		self.commandRouter.pushToastMessage('error', "Startup failed", "Could not start the LMS plugin in a fashionable manner.");
@@ -114,12 +128,20 @@ ControllerLMS.prototype.getUIConfig = function() {
     {
 		self.logger.info("## populating UI...");
 		
+		var indexOfSectionToRemove =
+                self.config.get('enabled') == true
+                    ? 0
+                    : 1;
+					
+		self.logger.info('REMOVING INDEX: ' + indexOfSectionToRemove);
+		
 		// Server settings
 		uiconf.sections[0].content[0].value = self.config.get('enabled');
-		uiconf.sections[0].content[1].value = self.config.get('mpd_pipe_name');	
 		self.logger.info("1/1 environment settings loaded");
 		
+		//uiconf.sections.splice(indexOfSectionToRemove, 1);
 		self.logger.info("Populated config screen.");
+		self.generateDependencylist();
 		
 		defer.resolve(uiconf);
 	})
@@ -161,20 +183,41 @@ ControllerLMS.prototype.updateLMSConfiguration = function (data)
 	var defer = libQ.defer();
 	
 	self.config.set('enabled', data['enabled']);
-	
 	self.logger.info("Successfully updated LMS configuration");
-	
+
 	if(data['enabled'] == true)
-		self.restartService("logitechmediaserver", false);
-	else
-		self.stopService("logitechmediaserver");
-	})
-	.fail(function(e)
 	{
-		defer.reject(new error());
-	});
+		self.restartService("logitechmediaserver", false)
+		.then(function(edefer)
+		{
+			defer.resolve();
+		})
+		.fail(function()
+		{
+			self.commandRouter.pushToastMessage('error', "Restart failed", "Restarting logitechmediaserver failed with error: " + error);
+			defer.reject(new Error());
+		});
+	}
+	else
+	{
+		self.stopService("logitechmediaserver")
+		.then(function(edefer)
+		{
+			defer.resolve();
+		})
+		.fail(function()
+		{
+			self.commandRouter.pushToastMessage('error', "Stopping failed", "Stopping logitechmediaserver failed with error: " + error);
+			defer.reject(new Error());
+		});
+	}
 	
 	return defer.promise;
+}
+
+ControllerLMS.prototype.redirectToWebconsole = function (data)
+{
+
 }
 
 ControllerLMS.prototype.restartService = function (serviceName, boot)
@@ -254,4 +297,31 @@ ControllerLMS.prototype.replaceStringInFile = function (pattern, value, inFile)
 	});
 	
 	return defer.promise;
+}
+
+ControllerLMS.prototype.generateDependencylist = function ()
+{
+	fs.readdir(__dirname + "/node_modules", function (err, dirs) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    dirs.forEach(function(dir){
+      if (dir.indexOf(".") !== 0) {
+        var packageJsonFile = __dirname + "/node_modules/" + dir + "/package.json";
+        if (fs.existsSync(packageJsonFile)) {
+          fs.readFile(packageJsonFile, function (err, data) {
+            if (err) {
+              console.log(err);
+            }
+            else {
+              var json = JSON.parse(data);
+              self.logger.info('"'+json.name+'": "' + json.version + '",');
+            }
+          });
+        }
+      }
+    });
+
+  });
 }
