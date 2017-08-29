@@ -139,7 +139,7 @@ ControllerLMS.prototype.getUIConfig = function() {
 		uiconf.sections[0].content[0].value = self.config.get('enabled');
 		self.logger.info("1/1 environment settings loaded");
 		
-		//uiconf.sections.splice(indexOfSectionToRemove, 1);
+		uiconf.sections.splice(indexOfSectionToRemove, 1);
 		self.logger.info("Populated config screen.");
 		self.generateDependencylist();
 		
