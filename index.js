@@ -1,11 +1,14 @@
 'use strict';
 
-var libQ = require('kew');
-var libNet = require('net');
-var fs = require('fs-extra');
 var config = new (require('v-conf'))();
 var exec = require('child_process').exec;
+var fs = require('fs-extra');
+var ifconfig = require('wireless-tools/ifconfig');
+var ip = require('ip');
+var libNet = require('net');
+var libQ = require('kew');
 var net = require('net');
+var currentIp = '';
 
 // Define the ControllerLMS class
 module.exports = ControllerLMS;
@@ -119,6 +122,7 @@ ControllerLMS.prototype.getUIConfig = function() {
     var lang_code = this.commandRouter.sharedVars.get('language_code');
 
 	self.getConf(this.configFile);
+	self.getCurrentIP();
 	self.logger.info("Loaded the previous config.");
 	
 	self.commandRouter.i18nJson(__dirname+'/i18n/strings_' + lang_code + '.json',
@@ -127,21 +131,15 @@ ControllerLMS.prototype.getUIConfig = function() {
     .then(function(uiconf)
     {
 		self.logger.info("## populating UI...");
+		var consoleUrl = 'http://' + currentIp + ':9000';
 		
-		var indexOfSectionToRemove =
-                self.config.get('enabled') == true
-                    ? 0
-                    : 1;
-					
-		self.logger.info('REMOVING INDEX: ' + indexOfSectionToRemove);
+		uiconf.sections[0].content[0].onClick.url = consoleUrl;
+		uiconf.sections[1].content[0].value = self.config.get('enabled');
+		self.logger.info("2/2 LMS settings loaded");
 		
-		// Server settings
-		uiconf.sections[0].content[0].value = self.config.get('enabled');
-		self.logger.info("1/1 environment settings loaded");
-		
-		uiconf.sections.splice(indexOfSectionToRemove, 1);
+		if(self.config.get('enabled') == false)
+			uiconf.sections.splice(0, 1);
 		self.logger.info("Populated config screen.");
-		self.generateDependencylist();
 		
 		defer.resolve(uiconf);
 	})
@@ -213,12 +211,7 @@ ControllerLMS.prototype.updateLMSConfiguration = function (data)
 	}
 	
 	return defer.promise;
-}
-
-ControllerLMS.prototype.redirectToWebconsole = function (data)
-{
-
-}
+};
 
 ControllerLMS.prototype.restartService = function (serviceName, boot)
 {
@@ -251,7 +244,7 @@ ControllerLMS.prototype.restartService = function (serviceName, boot)
 	}
 
 	return defer.promise;
-}
+};
 
 ControllerLMS.prototype.stopService = function (serviceName)
 {
@@ -274,7 +267,7 @@ ControllerLMS.prototype.stopService = function (serviceName)
 	});
 
 	return defer.promise;
-}
+};
 
 ControllerLMS.prototype.replaceStringInFile = function (pattern, value, inFile)
 {
@@ -297,31 +290,34 @@ ControllerLMS.prototype.replaceStringInFile = function (pattern, value, inFile)
 	});
 	
 	return defer.promise;
-}
+};
 
-ControllerLMS.prototype.generateDependencylist = function ()
-{
-	fs.readdir(__dirname + "/node_modules", function (err, dirs) {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    dirs.forEach(function(dir){
-      if (dir.indexOf(".") !== 0) {
-        var packageJsonFile = __dirname + "/node_modules/" + dir + "/package.json";
-        if (fs.existsSync(packageJsonFile)) {
-          fs.readFile(packageJsonFile, function (err, data) {
-            if (err) {
-              console.log(err);
+ControllerLMS.prototype.getCurrentIP = function () {
+    var self = this;
+    var defer = libQ.defer();
+	var ipaddr = '';
+	
+    ifconfig.status('wlan0', function(err, status) 
+	{
+        if (status != undefined)
+		{
+            if (status.ipv4_address != undefined) 
+			{
+                currentIp = status.ipv4_address;
+                defer.resolve(ipaddr);
+            } 
+			else 
+			{
+                currentIp = ip.address();
+                defer.resolve(ipaddr);
             }
-            else {
-              var json = JSON.parse(data);
-              self.logger.info('"'+json.name+'": "' + json.version + '",');
-            }
-          });
         }
-      }
+		else
+		{
+			// Try again, but now only ethernet
+			currentIp = ip.address();
+			defer.resolve(ipaddr);
+		}
     });
-
-  });
-}
+    return defer.promise;
+};
