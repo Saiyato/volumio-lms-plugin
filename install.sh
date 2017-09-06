@@ -18,10 +18,10 @@ if [ ! -f $INSTALLING ]; then
 	for f in /home/volumio/logitechmediaserver/logitechmediaserver*.deb; do dpkg -i "$f"; done
 	apt-get -f install
 	
-	# Needed for SSL connections
+	# Needed for SSL connections; e.g. github
 	apt-get install libio-socket-ssl-perl lame -y
 	
-	# Get compiled CPAN for current Perl Version and Link it if not existing
+	# Get compiled CPAN for current Perl version and link it; if it doesn't exist
 	PERLV=$(perl -v | grep -o "(v[0-9]\.[0-9]\+" | sed "s/(v//;s/)//")
 	var=$(awk 'BEGIN{ print "'$PERLV'"<"'5.20'" }')
 	if [ "$var" -eq 0 -a ! -e /usr/share/squeezeboxserver/CPAN/arch/$PERLV/arm-linux-gnueabihf-thread-multi-64int/ ]; then
@@ -50,6 +50,23 @@ if [ ! -f $INSTALLING ]; then
 	# Add the systemd unit
 	rm /etc/systemd/system/logitechmediaserver.service	
 	wget -O /etc/systemd/system/logitechmediaserver.service https://raw.githubusercontent.com/Saiyato/volumio-lms-plugin/master/unit/logitechmediaserver.service
+	
+	# Image::Scale fix
+	wget -O /opt/CPAN_FIX_IMAGE.zip https://github.com/Saiyato/volumio-lms-plugin/raw/master/known_working_versions/CPAN_FIX_IMAGE.zip
+	unzip -o /opt/CPAN_FIX_IMAGE.zip -d /opt/CPAN/arm-linux-gnueabihf-thread-multi-64int
+	chmod 777 /opt/CPAN/arm-linux-gnueabihf-thread-multi-64int/auto/Image/Scale/Scale.so
+	echo "CPAN image fix"	
+	
+	# Fix Ubuntu interpreter
+	ln /lib/arm-linux-gnueabihf/ld-linux.so.3 /lib/ld-linux.so.3
+	
+	# Audio fix for DSD
+	wget -O /opt/CPAN_AUDIO_DSD_7.9.tar https://github.com/Saiyato/volumio-lms-plugin/raw/master/known_working_versions/CPAN_AUDIO_DSD_7.9.tar
+	tar -xf /opt/CPAN_AUDIO_DSD_7.9.tar -C /opt		
+	wget -O /opt/DSDPLAYER-BIN.zip https://github.com/Saiyato/volumio-lms-plugin/raw/master/known_working_versions/DSDPLAYER-BIN.zip
+	unzip -o /opt/dsdplayer-bin.zip -d /usr/share/squeezeboxserver/Bin/
+	
+	sleep 3
 	
 	rm $INSTALLING
 

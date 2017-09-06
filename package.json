@@ -1,6 +1,6 @@
 {
   "name": "lms",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Logitech Media Server integration",
   "main": "index.js",
   "scripts": {
