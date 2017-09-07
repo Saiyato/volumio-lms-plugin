@@ -19,7 +19,7 @@ if [ ! -f $INSTALLING ]; then
 	apt-get -f install
 	
 	# Needed for SSL connections; e.g. github
-	apt-get install libio-socket-ssl-perl lame -y
+	apt-get install libio-socket-ssl-perl lame unzip -y
 	
 	# Get compiled CPAN for current Perl version and link it; if it doesn't exist
 	PERLV=$(perl -v | grep -o "(v[0-9]\.[0-9]\+" | sed "s/(v//;s/)//")
@@ -48,23 +48,27 @@ if [ ! -f $INSTALLING ]; then
 	usermod -aG audio squeezeboxserver
 
 	# Add the systemd unit
+	echo "Adding the systemd unit"
 	rm /etc/systemd/system/logitechmediaserver.service	
 	wget -O /etc/systemd/system/logitechmediaserver.service https://raw.githubusercontent.com/Saiyato/volumio-lms-plugin/master/unit/logitechmediaserver.service
 	
 	# Image::Scale fix
+	echo "Fixing CPAN Image::Scale..."
 	wget -O /opt/CPAN_FIX_IMAGE.zip https://github.com/Saiyato/volumio-lms-plugin/raw/master/known_working_versions/CPAN_FIX_IMAGE.zip
 	unzip -o /opt/CPAN_FIX_IMAGE.zip -d /opt/CPAN/arm-linux-gnueabihf-thread-multi-64int
 	chmod 777 /opt/CPAN/arm-linux-gnueabihf-thread-multi-64int/auto/Image/Scale/Scale.so
-	echo "CPAN image fix"	
+	echo "CPAN image fix completed"	
 	
 	# Fix Ubuntu interpreter
 	ln /lib/arm-linux-gnueabihf/ld-linux.so.3 /lib/ld-linux.so.3
 	
 	# Audio fix for DSD
+	echo "Fixing CPAN DSD playback..."
 	wget -O /opt/CPAN_AUDIO_DSD_7.9.tar https://github.com/Saiyato/volumio-lms-plugin/raw/master/known_working_versions/CPAN_AUDIO_DSD_7.9.tar
-	tar -xf /opt/CPAN_AUDIO_DSD_7.9.tar -C /opt		
+	tar -xf /opt/CPAN_AUDIO_DSD_7.9.tar -C /opt
 	wget -O /opt/DSDPLAYER-BIN.zip https://github.com/Saiyato/volumio-lms-plugin/raw/master/known_working_versions/DSDPLAYER-BIN.zip
-	unzip -o /opt/dsdplayer-bin.zip -d /usr/share/squeezeboxserver/Bin/
+	unzip -o /opt/DSDPLAYER-BIN.zip -d /usr/share/squeezeboxserver/Bin/
+	echo "CPAN DSD playback fix completed"
 	
 	sleep 3
 	

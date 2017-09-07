@@ -10,7 +10,7 @@ PIDFile=/var/run/logitechmediaserver.pid
 # Legacy code; name is still squeezeboxserver
 WorkingDirectory=/var/lib/squeezeboxserver
 ExecStartPre=/bin/mkdir -p /var/log/squeezeboxserver
-ExecStartPre=/bin/chown -R volumio /var/log/squeezeboxserver
+ExecStartPre=/bin/chown -R volumio:volumio /var/log/squeezeboxserver
 ExecStart=/usr/sbin/squeezeboxserver \
         --prefsdir /var/lib/squeezeboxserver/prefs \
         --cachedir /var/lib/squeezeboxserver/cache \
