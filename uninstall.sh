@@ -7,6 +7,7 @@ if [ ! -f $INSTALLING ]; then
 	touch $INSTALLING
 
 	# Uninstall LMS
+	dpkg -P squeezeboxserver
 
 	rm $INSTALLING
 
