@@ -83,6 +83,9 @@ if [ ! -f $INSTALLING ]; then
 			chmod 664 -R /var/lib/squeezeboxserver
 		fi
 		
+		# Reload the systemd unit
+		systemctl daemon-reload
+		
 		sleep 3
 	else
 		echo "A technical error occurred, the plugin already exists, but installation was able to continue."
