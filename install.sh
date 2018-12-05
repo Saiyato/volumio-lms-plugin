@@ -107,6 +107,9 @@ if [ ! -f $INSTALLING ]; then
 		
 		# Tidy up
 		rm -rf /home/volumio/logitechmediaserver
+		rm /opt/CPAN_AUDIO_DSD_7.9.tar
+		rm /opt/CPAN_FIX_IMAGE.zip
+		rm /opt/DSDPLAYER-BIN.zip
 		
 		# Reload the systemd unit
 		systemctl daemon-reload
