@@ -15,8 +15,12 @@ if [ ! -f $INSTALLING ]; then
 		
 		# Download LMS 7.9.1
 		echo "Downloading installation package..."
-		mkdir /home/volumio/logitechmediaserver
-		# wget -O /home/volumio/logitechmediaserver/logitechmediaserver_7.9.0_arm.deb http://downloads.slimdevices.com/LogitechMediaServer_v7.9.0/logitechmediaserver_7.9.0_arm.deb
+		if [ ! -d /home/volumio/logitechmediaserver ];
+		then
+			mkdir /home/volumio/logitechmediaserver
+		else
+			rm /home/volumio/logitechmediaserver/logitechmediaserver*.deb
+		fi
 		
 		if [ $cpu = "armv6l" ] || [ $cpu = "armv7l" ];
 		then
@@ -100,6 +104,9 @@ if [ ! -f $INSTALLING ]; then
 		then
 			chmod 664 -R /var/lib/squeezeboxserver
 		fi
+		
+		# Tidy up
+		rm -rf /home/volumio/logitechmediaserver
 		
 		# Reload the systemd unit
 		systemctl daemon-reload
