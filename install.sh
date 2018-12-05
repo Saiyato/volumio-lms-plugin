@@ -9,7 +9,7 @@ if [ ! -f $INSTALLING ]; then
 	cpu=$(lscpu | awk 'FNR == 1 {print $2}')
 	echo "cpu: " $cpu
 
-	if [ ! -f /usr/sbin/squeezeboxserver ];
+	if [ ! -f /usr/sbin/squeezeboxserver ] || [ $1 == 'force' ];
 	then
 		apt-get update
 		
@@ -106,7 +106,7 @@ if [ ! -f $INSTALLING ]; then
 		
 		sleep 3
 	else
-		echo "A technical error occurred, the plugin already exists, but installation was able to continue."
+		echo "A technical error occurred, the plugin already exists, but installation was able to continue. If you just want to install LMS again, try the force parameter: [sh script.sh force]."
 	fi
 	
 	rm $INSTALLING
