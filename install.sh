@@ -9,7 +9,7 @@ if [ ! -f $INSTALLING ]; then
 	cpu=$(lscpu | awk 'FNR == 1 {print $2}')
 	echo "cpu: " $cpu
 
-	if [ ! -f /usr/sbin/squeezeboxserver ] || [ $1 == 'force' ];
+	if [ ! -f /usr/sbin/squeezeboxserver ] || [ $1 =  "force" ];
 	then
 		apt-get update
 		
