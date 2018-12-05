@@ -97,13 +97,8 @@ if [ ! -f $INSTALLING ]; then
 		# Stop service and fix rights for preference folder
 		service logitechmediaserver stop
 		
-		# Rights issue in pre-260 builds
-		VERSION=$(cat /etc/os-release | grep VOLUMIO_VERSION | cut -d'"' -f 2)
-		BUILD=$(echo $VERSION | cut -d'.' -f 2)
-		if [ $(( $BUILD )) -lt 260 ];
-		then
-			chmod 664 -R /var/lib/squeezeboxserver
-		fi
+		# Fix rights issue for preference, cache and log directory, needs execute right for prefs
+		chmod 744 -R /var/lib/squeezeboxserver		
 		
 		# Tidy up
 		rm -rf /home/volumio/logitechmediaserver
