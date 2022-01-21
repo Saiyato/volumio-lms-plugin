@@ -8,11 +8,8 @@ if [ ! -f $INSTALLING ]; then
 
 	# Uninstall LMS and cleaning up
 	dpkg -P squeezeboxserver
-	rm -rf /var/lib/squeezeboxserver
-	rm -rf /usr/share/squeezeboxserver
-	rm -rf /opt/CPAN
-	rm /usr/sbin/squeezeboxserver*
-	rm /etc/systemd/system/logitechmediaserver.service
+	dpkg -P logitechmediaserver
+	unlink /etc/systemd/system/logitechmediaserver.service
 	
 	# Not uninstalling dependencies, because they might be used by other plugins.
 

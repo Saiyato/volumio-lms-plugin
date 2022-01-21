@@ -18,7 +18,7 @@ if [ ! -f $INSTALLING ]; then
 		then
 			mkdir /home/volumio/logitechmediaserver
 		else
-			rm /home/volumio/logitechmediaserver/logitechmediaserver*.deb
+			rm -rf /home/volumio/logitechmediaserver/*.*
 		fi
 		
 		BASE_URL="http://downloads.slimdevices.com/"
@@ -54,7 +54,7 @@ if [ ! -f $INSTALLING ]; then
 		usermod -aG audio squeezeboxserver
 		# Add the systemd unit
 		echo "Using the prepared systemd unit"
-		rm /etc/systemd/system/logitechmediaserver.service
+		rm -rf /etc/systemd/system/logitechmediaserver.service
 		ln -fs /data/plugins/music_service/lms/unit/logitechmediaserver.service /etc/systemd/system/logitechmediaserver.service
 		# Stop service and fix rights for preference folder
 		service logitechmediaserver stop
